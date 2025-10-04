@@ -1,0 +1,37 @@
+{
+  "name": "example-react-app",
+  "version": "1.0.0",
+  "description": "My example app",
+  "main": "index.tsx",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "nodemon src/server.ts",
+    "client": "npm start --prefix client"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@tanstack/react-query": "^5.90.2",
+    "@tanstack/react-query-devtools": "^5.90.2",
+    "@types/bcrypt": "^5.0.2",
+    "@types/cookie-parser": "^1.4.7",
+    "@types/jsonwebtoken": "^9.0.7",
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.7",
+    "express": "^4.21.1",
+    "google-auth-library": "^9.14.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.9.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/google-one-tap": "^1.2.6",
+    "@types/google.accounts": "^0.0.15",
+    "@types/node": "^22.7.6",
+    "concurrently": "^9.0.1",
+    "nodemon": "^3.1.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3"
+  }
+}
