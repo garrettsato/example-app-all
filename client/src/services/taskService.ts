@@ -15,3 +15,25 @@ export const getTasks = async () => {
         return false;
     }
 };
+
+export const getTaskQuery = async() => {
+    try {
+        const response = await api.post<any>('/api/tasks', { });
+        localStorage.setItem('tasks', response.data.tasks);
+        return response.data.tasks;
+    } catch (error) {
+        console.error('Get tasks error:', error.response.data);
+        return false;
+    }
+}
+
+export const addTaskQuery = async() => {
+    try {
+        const response = await api.post<any>('/api/tasks', { });
+        localStorage.setItem('tasks', response.data.tasks);
+        return response.data.tasks;
+    } catch (error) {
+        console.error('Get tasks error:', error.response.data);
+        return false;
+    }
+}

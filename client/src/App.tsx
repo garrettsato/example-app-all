@@ -7,9 +7,11 @@ import ResponsiveAppBar from './components/ResponsiveAppBar'
 import AppFooter from './components/Footer'
 
 
+
 const App: React.FC = () => {
   const [message, setMessage] = useState('');
   const [email, setEmail] = useState(null);
+
 
   useEffect(() => {
     fetch('/api/hello')

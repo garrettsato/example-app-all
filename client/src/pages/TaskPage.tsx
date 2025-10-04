@@ -18,6 +18,8 @@ import TaskCardList from '../components/TaskCardList';
 import {Task} from "@mui/icons-material";
 import {TasksContextProvider} from "../providers/TasksProvider";
 import {useTasksContext} from "../providers/TasksProvider";
+import {useMutation, useQueryClient} from "@tanstack/react-query";
+
 
 // Validation for the form fields
 const validateEmail = (email: string) => {
@@ -37,10 +39,20 @@ const TaskPage: React.FC = () => {
     const [errors, setErrors] = useState({ email: '', password: '', confirmPassword: '' });
     const navigate = useNavigate(); // Initialize the navigate hook
     const { tasks, addTask } = useTasksContext();
+    const queryClient = useQueryClient();
+    const { mutate, isPending, isError, error, reset } = useMutation({
+        mutationFn: async (task: any) => {
+            return task;
+        },
+        onSuccess: (newTask) => {
+            queryClient.setQueryData<any>(["tasks"], (old = []) => [...old, newTask]);
+        }
+    })
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         addTask({ title, description });
+        mutate({ title: title, description: description});
     };
 
     return (
