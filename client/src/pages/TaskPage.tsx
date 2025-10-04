@@ -19,6 +19,7 @@ import {Task} from "@mui/icons-material";
 import {TasksContextProvider} from "../providers/TasksProvider";
 import {useTasksContext} from "../providers/TasksProvider";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
+import {addTaskQuery} from "../services/taskService";
 
 
 // Validation for the form fields
@@ -42,6 +43,7 @@ const TaskPage: React.FC = () => {
     const queryClient = useQueryClient();
     const { mutate, isPending, isError, error, reset } = useMutation({
         mutationFn: async (task: any) => {
+            await addTaskQuery(task);
             return task;
         },
         onSuccess: (newTask) => {
@@ -51,7 +53,7 @@ const TaskPage: React.FC = () => {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        addTask({ title, description });
+        // addTask({ title, description });
         mutate({ title: title, description: description});
     };
 

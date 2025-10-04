@@ -22,4 +22,7 @@ router.post('/protected', loginController.protectedApi);
 
 router.post('/tasks', tasksController.getTasks)
 
+router.post('/createTask', tasksController.createTask)
+
+
 export default router;

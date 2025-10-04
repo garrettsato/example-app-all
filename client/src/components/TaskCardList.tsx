@@ -27,11 +27,12 @@ type TaskCarListProps = {
 
 
 function TaskCardList() {
-    const { tasks, addTask } = useTasksContext();
     const { data, isLoading, isError } = useQuery({
         queryKey: ["tasks"],     // cache key
         queryFn: getTaskQuery,     // promise-returning function
         staleTime: 1000 * 30,    // (optional) consider data fresh for 30s
+        refetchOnWindowFocus: false,   // no focus refetch
+        refetchOnReconnect: false,     // no reconnect refetch
     });
 
     if (isLoading) return <p>Loading…</p>;
