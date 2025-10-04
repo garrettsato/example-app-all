@@ -1,0 +1,47 @@
+class Solution:
+  def partition(self, s: str) -> List[List[str]]:
+    results = []
+    memo = [[None for _ in range(len(s))] for _ in range(len(s))]
+
+    def is_palindrome(start: int, end: int) -> None:
+      if memo[start][end] is None:
+        left = start
+        right = end
+        is_palindrome = True
+
+        while left < right:
+          if s[left] != s[right]:
+            is_palindrome = False
+            break
+          left += 1
+          right -= 1
+
+        memo[start][end] = is_palindrome
+
+      return memo[start][end]
+
+    def perform_partition(substrings: List[str], start: int, end: int) -> None:
+      if start > len(s):
+        raise Exception('Did not expect this condition')
+
+      if start == len(s):
+        results.append(substrings.copy())
+        return
+
+      if end >= len(s):
+        return
+
+      if is_palindrome(start, end):
+        current_word = s[start : end + 1]
+        substrings.append(current_word)
+        perform_partition(substrings, end + 1, end + 1)
+        substrings.pop()
+
+      perform_partition(substrings, start, end + 1)
+
+    perform_partition([], 0, 0)
+
+    return results
+
+
+
