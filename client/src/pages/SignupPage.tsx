@@ -55,7 +55,7 @@ const SignUpForm: React.FC = () => {
 
     // Call the API if the form is valid
     try {
-      const response = await fetch("api/signup", {
+      const response = await fetch("http://localhost:8090/api/signup", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

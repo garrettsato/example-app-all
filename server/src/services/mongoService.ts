@@ -1,30 +1,31 @@
 import { MongoClient, Db, Collection } from 'mongodb';
+import crypto from "crypto";
+import {MongoConnectionManager} from "../dependencies/mongoConnectionManager";
 
-export class MongoService {
-    private mongoClient: MongoClient;
-    private db: Db;
+export interface MongoService {
+    createUser(email: string, hashedPassword: string);
+    getHashedPassword(email: string): Promise<string>;
+    createTasks(email: string, title: string, description: string): Promise<string>;
+    getTasks(email: string): Promise<any>;
+    save(email: string): Promise<any>;
+}
 
-    constructor(url: string) {
-        this.mongoClient = new MongoClient(url);
-    }
+export interface MongoServiceDependencies {
+    mongoConnectionManager: MongoConnectionManager;
+}
 
-    public async save(email: string) {
-        try {
-            // Connect to the MongoDB server
+export function createMongoService(dependencies: MongoServiceDependencies): MongoService {
+    const { mongoConnectionManager } = dependencies;
 
-      
-        } finally {
-            // Ensure the client will close when finished or on error
-        }
-    }
+    const save = async (email: string): Promise<any> => {}
 
-    public async createUser(email: string, hashedPassword: string) {
+    const createUser = async (email: string, hashedPassword: string) => {
         try {
             // Connect to the MongoDB server
             console.log('Connected successfully to MongoDB');
       
             // Get a reference to the database
-            const db = this.mongoClient.db("app");
+            const db = await mongoConnectionManager.getDb();
       
             // Get a reference to the collection
             const collection = db.collection("users");
@@ -47,20 +48,18 @@ export class MongoService {
             if (error.code === 11000) {
                 console.log('Duplicate entry detected: ', error.keyValue);
             }
-      
-        } finally {
-            // Ensure the client will close when finished or on error
-            await this.mongoClient.close();
+
+            console.log('Error creating user: ', error);
         }
     }
 
-    public async getHashedPassword(email: string): Promise<string> {
+    const getHashedPassword = async (email: string): Promise<string> => {
         try {
             // Connect to the MongoDB server
             console.log('Connected successfully to MongoDB');
       
             // Get a reference to the database
-            const db = this.mongoClient.db("app");
+            const db = await mongoConnectionManager.getDb();
       
             // Get a reference to the collection
             const collection = db.collection("users");
@@ -79,18 +78,16 @@ export class MongoService {
                 console.log('Duplicate entry detected: ', error.keyValue);
             }
       
-        } finally {
-            // Ensure the client will close when finished or on error
         }
     }
 
-    public async createTasks(email: string, title: string, description: string): Promise<string> {
+    const createTasks = async (email: string, title: string, description: string): Promise<string>  => {
         try {
             // Connect to the MongoDB server
             console.log('Connected successfully to MongoDB');
 
             // Get a reference to the database
-            const db = this.mongoClient.db("app");
+            const db = await mongoConnectionManager.getDb();
 
             // Get a reference to the collection
             const collection = db.collection("users");
@@ -121,18 +118,16 @@ export class MongoService {
                 console.log('Duplicate entry detected: ', error.keyValue);
             }
 
-        } finally {
-            // Ensure the client will close when finished or on error
         }
     }
 
-    public async getTasks(email: string): Promise<any> {
+    const getTasks = async (email: string): Promise<any> => {
         try {
             // Connect to the MongoDB server
             console.log('Connected successfully to MongoDB');
 
             // Get a reference to the database
-            const db = this.mongoClient.db("app");
+            const db = await mongoConnectionManager.getDb();
 
             // Get a reference to the collection
             const collection = db.collection("users");
@@ -164,4 +159,6 @@ export class MongoService {
             // Ensure the client will close when finished or on error
         }
     }
+
+    return { createUser, getHashedPassword, createTasks, getTasks, save }
 }

@@ -1,0 +1,30 @@
+version: "3.9"
+
+services:
+  frontend:
+    build: ./client         # looks for frontend/Dockerfile
+    ports:
+      - "3000:80"             # host:container (Nginx serves on 80)
+    depends_on:
+      - backend
+
+  backend:
+    build: ./server          # looks for backend/Dockerfile
+    ports:
+      - "8090:8090"           # Express server
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/mydb
+      - PORT=8090
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:6
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:

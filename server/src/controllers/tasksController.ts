@@ -4,17 +4,15 @@ import { MongoService } from '../services/mongoService'
 import bcrypt from 'bcrypt';
 import { TokenService } from '../services/tokenService';
 
-export class TasksController {
-    private mongoService: MongoService;
-    private tokenService: TokenService;
+export interface TasksControllerDependencies {
+    mongoService: MongoService;
+    tokenService: TokenService;
+}
 
-    constructor() {
-        this.mongoService = new MongoService('mongodb://localhost:27017');
-        this.tokenService = new TokenService();
-    }
+export function createTasksController(deps: TasksControllerDependencies) {
+    const { mongoService, tokenService } = deps;
 
-
-    getTasks = async (req: Request, res: Response, next: NextFunction) => {
+    const getTasks = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const authHeader = req.headers['authorization'];
             const token = authHeader && authHeader.split(' ')[1]; // Format: 'Bearer TOKEN'
@@ -23,10 +21,10 @@ export class TasksController {
                 res.status(401).json({ message: 'Access token required' });
             }
             console.log('got getTasks request');
-            const decodedToken = this.tokenService.verifyAccessToken(token);
+            const decodedToken = tokenService.verifyAccessToken(token);
             const email = decodedToken.sub;
             console.log('user: ' + email);
-            const taskResults = await this.mongoService.getTasks(email);
+            const taskResults = await mongoService.getTasks(email);
 
             console.log('task results: ', taskResults);
 
@@ -47,7 +45,7 @@ export class TasksController {
         }
     }
 
-    createTask = async (req: Request, res: Response, next: NextFunction) => {
+    const createTask = async (req: Request, res: Response, next: NextFunction) => {
         const authHeader = req.headers['authorization'];
         const token = authHeader && authHeader.split(' ')[1]; // Format: 'Bearer TOKEN'
 
@@ -55,14 +53,15 @@ export class TasksController {
             res.status(401).json({ message: 'Access token required' });
         }
         console.log('got createTasks request with token: ' + token + '');
-        const decodedToken = this.tokenService.verifyAccessToken(token);
+        const decodedToken = tokenService.verifyAccessToken(token);
         const email = decodedToken.sub;
         console.log('user: ' + email);
         console.log(req);
         console.log('body: ', req.body);
-        await this.mongoService.createTasks(email, req.body.title, req.body.description);
+        await mongoService.createTasks(email, req.body.title, req.body.description);
 
         res.status(200).send();
     }
 
+    return {createTask, getTasks};
 }

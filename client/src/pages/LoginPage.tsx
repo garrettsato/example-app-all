@@ -48,11 +48,12 @@ const LoginForm: React.FC = () => {
 
     // Call the API if the form is valid
     try {
-      const response = await fetch("api/login", {
+      const response = await fetch("http://localhost:8090/api/login", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify({ email, password }), // Send form data as JSON
       });
 

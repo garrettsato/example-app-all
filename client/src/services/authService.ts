@@ -3,7 +3,7 @@ import { InternalAxiosRequestConfig } from 'axios';
 import { jwtDecode } from 'jwt-decode';
 
 const api = axios.create({
-    baseURL: 'http://localhost:3000', // Adjust to your Express app's URL
+    baseURL: 'http://localhost:8090', // Adjust to your Express app's URL
     withCredentials: true, // Enable sending cookies
 });
 
@@ -30,6 +30,8 @@ api.interceptors.request.use(
   )
 
 export const login = async (username: string, password: string) => {
+    console.log("login called for port 8090");
+    console.log("base url: ", api.defaults.baseURL);
   try {
     const response = await api.post<any>('/api/login', { username, password });
     localStorage.setItem('accessToken', response.data.accessToken);

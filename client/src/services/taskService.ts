@@ -3,7 +3,7 @@ import {jwtDecode} from "jwt-decode";
 import {refreshToken} from "./authService";
 
 const api = axios.create({
-    baseURL: 'http://localhost:3000', // Adjust to your Express app's URL
+    baseURL: 'http://localhost:8090', // Adjust to your Express app's URL
     withCredentials: true, // Enable sending cookies
 });
 
